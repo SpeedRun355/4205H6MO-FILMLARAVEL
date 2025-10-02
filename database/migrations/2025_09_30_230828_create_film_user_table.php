@@ -15,11 +15,19 @@ class CreateFilmUserTable extends Migration
     {
         Schema::create('film_user', function (Blueprint $table) {
             $table->id();
-            $table->review();
-            $table->comment();
-            $table->user_id();
-            $table->film_id();
-            $table->erace();
+            $table->integer('review');
+            $table->integer('comment');
+            $table->foreignId('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+            $table->foreignId('film_id')
+                  ->references('id')
+                  ->on('films')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+            $table->tinyInteger('erase');
         });
     }
 
