@@ -26,6 +26,6 @@ class User extends Authenticatable
     ];
 
     public function Film_User(){
-        return $this->hasMany(Film_User::class);
+        return $this->hasMany(FilmUser::class);
     }
 }

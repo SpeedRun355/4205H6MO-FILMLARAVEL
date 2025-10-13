@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Films;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FilmController extends Controller
 {
@@ -14,8 +15,8 @@ class FilmController extends Controller
      */
     public function index()
     {
-        $articles = Films::all();
-        return view('films.index', compact('films'));
+        $film = Films::all();
+        return view('films.index', compact('film'));
     }
 
     /**
@@ -36,7 +37,21 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+                'name'=>'required',
+                'global_rating'=> 'required',
+                'film_genre'=> 'required',
+                'actors'=> 'required',
+                'director'=> 'required',
+            ]);
+            if($validator->fails())
+            {
+                return redirect()->back()->with('warning','Tous les champs sont requis');   
+            }
+            else{
+                Films::create($request->all());       
+                return redirect('/')->with('success', 'film Ajouté avec succès');
+            }
     }
 
     /**
@@ -47,7 +62,8 @@ class FilmController extends Controller
      */
     public function show($id)
     {
-        //
+        $film = Films::findOrFail($id);
+        return view('films.show', compact('film'));
     }
 
     /**
@@ -58,7 +74,9 @@ class FilmController extends Controller
      */
     public function edit($id)
     {
-        //
+        $film = Films::findOrFail($id);
+
+        return view('films.edit', compact('film'));
     }
 
     /**
@@ -68,9 +86,23 @@ class FilmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Films $film)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'name'=>'required',
+            'global_rating'=> 'required',
+            'film_genre'=> 'required',
+            'actors'=> 'required',
+            'director'=> 'required',
+        ]);
+        if($validator->fails())
+        {
+            return redirect()->back()->with('warning','Tous les champs sont requis');   
+        }
+        else{
+            $film->update($request->all());
+            return redirect('/')->with('success', 'film Modifié avec succès');
+        }
     }
 
     /**
@@ -81,6 +113,8 @@ class FilmController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $film = Films::findOrFail($id);
+        $film->delete();
+        return redirect('/')->with('success', 'film Supprimé avec succès');
     }
 }

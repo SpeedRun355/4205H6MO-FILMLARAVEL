@@ -2,30 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FilmUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FilmUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -34,42 +16,20 @@ class FilmUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'review' => 'required',
+            'comment'=>'required',
+            'user_id'=> 'required',
+            'film_id'=> 'required',
+        ]);
+        if($validator->fails())
+        {
+            return redirect()->back()->with('warning','Tous les champs sont requis');    
+        }
+        FilmUser::create($request->all());
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -79,6 +39,9 @@ class FilmUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $filmUser = FilmUser::findOrFail($id);
+        $filmUser->delete();
+    
+        return redirect()->back();
     }
 }
