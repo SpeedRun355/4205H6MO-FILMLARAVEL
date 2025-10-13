@@ -1,0 +1,15 @@
+.card .card-body {
+    background: #4da0f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+    padding: 24px;
+    transition: box-shadow 0.2s;
+}
+.card.card-body:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.col-lg-10 {
+    max-width: 100%;
+    content: center;
+}

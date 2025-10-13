@@ -7,7 +7,7 @@
     <div class="row">
 
         <div class="col-lg-10">
-            <h2>Liste des films</h2>
+            <h2>Liste des Films</h2>
         </div>
 
         <div class="col-lg-2">
