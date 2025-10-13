@@ -9,9 +9,9 @@
             <p class="lead">{{ $film->global_rating }}</p>
 
             <div class="buttons">
-                <a href="{{ url('films/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
+                <a href="{{ url('film/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
                 <a href="{{ url('/') }}" class="btn btn-info">Retour à la page d'accueil</a>  
-                <form action="{{ url('films/'. $film->id) }}" method="POST" style="display: inline">
+                <form action="{{ url('film/'. $film->id) }}" method="POST" style="display: inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -48,29 +48,28 @@
         </div>
 
     @endif
-    
+
+
   {{-- <form action="{{ url(url('films/'. $film->id). '/comments') }}" method="POST" enctype="multipart/form-data">  --}}
     <form action="{{route('filmUser.store')}}" method="POST" enctype="multipart/form-data"> 
 
         @csrf
         <div class="form-group mb-3">
-        <label for="author">Auteur</label>
-        <input type="text" class="form-control" id="author" placeholder="Entrez votre nom" name="author">
-    </div>
-        <div class="form-group mb-3">
-            <label for="title">Titre</label>
-            <input type="text" class="form-control" id="title" placeholder="Entrez votre nom" name="title">
+            <label for="review">Note:</label>
+            <input type="text" class="form-control" id="review" placeholder="Entrez votre note" name="review">
         </div>
 
+        <div class="form-group mb-3">
+            <label for="comment">Ajouter votre commentaire:</label>
+            <textarea name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
+        </div>
 
         <div class="form-group mb-3">
+            <label for="user_id">User ID :</label>
+            <input type="text" class="form-control" id="user_id" placeholder="Entrez votre user id" name="user_id">
+        </div>
 
-            <label for="content">Ajouter votre commentaire:</label>
-            <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
-         
-            <input type="hidden" name="film_id" value="{{ $film->id}}" /><br /> 
-            {{-- <input type="hidden" value="{{ $film->id}}">{{ $film->id }}/><br /> --}}
-          </div>
+        <input type="hidden" name="film_id" value="{{ $film->id}}" /><br />
 
         <button type="submit" class="btn btn-primary">Publier</button>
     </form>

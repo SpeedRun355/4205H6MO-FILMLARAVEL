@@ -16,8 +16,8 @@
         @csrf
 
         <div class="form-group mb-3">
-            <label for="title">Titre:</label>
-            <input type="text" class="form-control" id="title" placeholder="Entrez un titre" name="title">
+            <label for="name">Titre:</label>
+            <input type="text" class="form-control" id="name" placeholder="Entrez un titre" name="name">
         </div>
         <div class="form-group mb-3">
             <label for="global_rating">Note globale:</label>

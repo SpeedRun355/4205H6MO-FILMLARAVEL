@@ -16,12 +16,12 @@
 
     @endif
 
-    <form method="post" action="{{ url('films/'. $film->id) }}" >
+    <form method="post" action="{{ url('film/'. $film->id) }}" >
         @method('PATCH')
         @csrf
         <div class="form-group mb-3">
-            <label for="title">Titre:</label>
-            <input type="text" class="form-control" id="title" placeholder="Entrez un titre" name="title" value="{{ $film->name }}">
+            <label for="name">Titre:</label>
+            <input type="text" class="form-control" id="name" placeholder="Entrez un titre" name="name" value="{{ $film->name }}">
         </div>
         <div class="form-group mb-3">
             <label for="global_rating">Note globale:</label>
