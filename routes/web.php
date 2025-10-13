@@ -22,6 +22,6 @@ Route:: get ('/', [FilmController::class, 'index']);
 //création des routes avec resources
 Route::resources([
                  'film'=> FilmController::class,
-                 'review'=> FilmUserController::class,
+                 'filmUser'=> FilmUserController::class,
                 ]);
 
