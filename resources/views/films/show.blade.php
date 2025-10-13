@@ -6,13 +6,13 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h1>{{ $article->title }} </h1><strong>Crée le: {{ $article->created_at }} </strong>
-            <p class="lead">{{ $article->content }}</p>
+            <h1>{{ $film->name }} </h1><strong>Crée le: {{ $film->created_at }} </strong>
+            <p class="lead">{{ $film->global_rating }}</p>
 
             <div class="buttons">
-                <a href="{{ url('articles/'. $article->id .'/edit') }}" class="btn btn-info">Modifier</a>
+                <a href="{{ url('films/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
                 <a href="{{ url('/') }}" class="btn btn-info">Retour à la page d'accueil</a>  
-                <form action="{{ url('articles/'. $article->id) }}" method="POST" style="display: inline">
+                <form action="{{ url('films/'. $film->id) }}" method="POST" style="display: inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -24,8 +24,8 @@
  {{-- Section des commentaires --}}
  <div class="container">   
     <h2> Les commentaires:</h2>
-    @foreach ($article->comments as $comment)
-        <strong> Commentaire numéro {{$comment ->id}} rédigé par: {{ $comment->author }} le {{ $comment->created_at }} </strong>
+    @foreach ($film_user->reviews as $review)
+        <strong> Commentaire numéro {{$review ->id}} rédigé par: {{ $user->name }} le {{ $review->created_at }} </strong>
         <h3>{{ $comment->title }}</h2>
      <p class="lead">{{ $comment->content }}</p> 
      <div class="buttons">
