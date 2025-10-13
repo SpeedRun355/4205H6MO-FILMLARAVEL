@@ -25,11 +25,12 @@
  <div class="container">   
     <h2> Les commentaires:</h2>
     @foreach ($film_user->reviews as $review)
-        <strong> Commentaire numéro {{$review ->id}} rédigé par: {{ $user->name }} le {{ $review->created_at }} </strong>
+        <strong> Commentaire numéro {{$review ->id}} rédigé par: {{ $review ->user->name }} le {{ $review->created_at }} </strong>
         <h3>{{ $comment->title }}</h2>
-     <p class="lead">{{ $comment->content }}</p> 
+     <h3>Note: {{ $review->review }}</h3>
+     <p class="lead">{{ $review->comment }}</p> 
      <div class="buttons">
-     <form action="{{ url('comments/'. $comment->id) }}" method="POST" style="display: inline">
+     <form action="{{ url('filmUser/'. $review->id) }}" method="POST" style="display: inline">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -68,7 +69,7 @@
             <label for="content">Ajouter votre commentaire:</label>
             <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
          
-            <input type="hidden" name="article_id" value="{{ $article->id}}" /><br /> 
+            <input type="hidden" name="article_id" value="{{ $film_user->id}}" /><br /> 
             {{-- <input type="hidden" value="{{ $article->id}}">{{ $article->id }}/><br /> --}}
           </div>
 
