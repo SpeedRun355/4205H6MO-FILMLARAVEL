@@ -31,7 +31,7 @@
 <div class="container">
 
     <div class="row">
-        @foreach ($articles as $index => $article)
+        @foreach ($films as $index => $film)
         <div class="col-md-4">
             <div class="card card-body">
          {{--  si vous voulez avoir le titre de votre données cliquable (ici c'est le titre de l'article) utiliser le bout de code ci-bas> --}}
