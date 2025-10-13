@@ -10,9 +10,9 @@
             <p class="lead">{{ $film->global_rating }}</p>
 
             <div class="buttons">
-                <a href="{{ url('films/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
+                <a href="{{ url('film/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
                 <a href="{{ url('/') }}" class="btn btn-info">Retour à la page d'accueil</a>  
-                <form action="{{ url('films/'. $film->id) }}" method="POST" style="display: inline">
+                <form action="{{ url('film/'. $film->id) }}" method="POST" style="display: inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -24,12 +24,12 @@
  {{-- Section des commentaires --}}
  <div class="container">   
     <h2> Les commentaires:</h2>
-    @foreach ($film_user->reviews as $review)
-        <strong> Commentaire numéro {{$review ->id}} rédigé par: {{ $user->name }} le {{ $review->created_at }} </strong>
-        <h3>{{ $comment->title }}</h2>
-     <p class="lead">{{ $comment->content }}</p> 
+    @foreach ($film->film_users as $film_user)
+        <strong> Commentaire numéro {{$film_user ->id}} rédigé par: {{ $user->name }} le {{ $film_user->created_at }} </strong>
+        <h3>{{ $film_user->title }}</h2>
+     <p class="lead">{{ $film_user->content }}</p> 
      <div class="buttons">
-     <form action="{{ url('comments/'. $comment->id) }}" method="POST" style="display: inline">
+     <form action="{{ url('film_user/'. $film_user->id) }}" method="POST" style="display: inline">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger">Supprimer</button>

@@ -12,6 +12,6 @@ class Films extends Model
 
     public function Film_Users()
     {
-        return $this->hasMany(FilmUser::class);
+        return $this->hasMany(FilmUser::class, 'film_id');
     }
 }
