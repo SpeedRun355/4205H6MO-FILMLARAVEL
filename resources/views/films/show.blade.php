@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <div class="container">
 
@@ -10,9 +9,9 @@
             <p class="lead">{{ $film->global_rating }}</p>
 
             <div class="buttons">
-                <a href="{{ url('film/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
+                <a href="{{ url('films/'. $film->id .'/edit') }}" class="btn btn-info">Modifier</a>
                 <a href="{{ url('/') }}" class="btn btn-info">Retour à la page d'accueil</a>  
-                <form action="{{ url('film/'. $film->id) }}" method="POST" style="display: inline">
+                <form action="{{ url('films/'. $film->id) }}" method="POST" style="display: inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -24,12 +23,13 @@
  {{-- Section des commentaires --}}
  <div class="container">   
     <h2> Les commentaires:</h2>
-    @foreach ($film->film_users as $film_user)
-        <strong> Commentaire numéro {{$film_user ->id}} rédigé par: {{ $user->name }} le {{ $film_user->created_at }} </strong>
-        <h3>{{ $film_user->title }}</h2>
-     <p class="lead">{{ $film_user->content }}</p> 
+    @foreach ($film->film_users as $review)
+        <strong> Commentaire numéro {{$review ->id}} rédigé par: {{ $review ->user->name }} le {{ $review->created_at }} </strong>
+        <h3>{{ $review->title }}</h2>
+     <h3>Note: {{ $review->review }}</h3>
+     <p class="lead">{{ $review->comment }}</p> 
      <div class="buttons">
-     <form action="{{ url('film_user/'. $film_user->id) }}" method="POST" style="display: inline">
+     <form action="{{ url('filmUser/'. $review->id) }}" method="POST" style="display: inline">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -49,8 +49,8 @@
 
     @endif
     
-  {{-- <form action="{{ url(url('articles/'. $article->id). '/comments') }}" method="POST" enctype="multipart/form-data">  --}}
-    <form action="{{route('comments.store')}}" method="POST" enctype="multipart/form-data"> 
+  {{-- <form action="{{ url(url('films/'. $film->id). '/comments') }}" method="POST" enctype="multipart/form-data">  --}}
+    <form action="{{route('filmUser.store')}}" method="POST" enctype="multipart/form-data"> 
 
         @csrf
         <div class="form-group mb-3">
@@ -68,8 +68,8 @@
             <label for="content">Ajouter votre commentaire:</label>
             <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
          
-            <input type="hidden" name="article_id" value="{{ $article->id}}" /><br /> 
-            {{-- <input type="hidden" value="{{ $article->id}}">{{ $article->id }}/><br /> --}}
+            <input type="hidden" name="film_id" value="{{ $film->id}}" /><br /> 
+            {{-- <input type="hidden" value="{{ $film->id}}">{{ $film->id }}/><br /> --}}
           </div>
 
         <button type="submit" class="btn btn-primary">Publier</button>

@@ -19,20 +19,25 @@
     <form method="post" action="{{ url('films/'. $film->id) }}" >
         @method('PATCH')
         @csrf
-
-
         <div class="form-group mb-3">
-
             <label for="title">Titre:</label>
-            <input type="text" class="form-control" id="title" placeholder="Entrer titre" name="title" value="{{ $film->name }}">
-
+            <input type="text" class="form-control" id="title" placeholder="Entrez un titre" name="title" value="{{ $film->name }}">
         </div>
-
         <div class="form-group mb-3">
-
-            <label for="content">Ajouter le contenu:</label>
-            <textarea name="content" id="content" cols="30" rows="10" class="form-control">{{ $film->global_rating}}</textarea>
-
+            <label for="global_rating">Note globale:</label>
+            <input type="text" class="form-control" id="global_rating" placeholder="Entrez une note globale" name="global_rating" value="{{ $film->global_rating }}">
+        </div>
+        <div class="form-group mb-3">
+            <label for="film_genre">Genre du film:</label>
+            <input type="text" class="form-control" id="film_genre" placeholder="Entrez le genre du film" name="film_genre" value="{{ $film->film_genre }}">
+        </div>
+        <div class="form-group mb-3">
+            <label for="actors">Acteurs:</label>
+            <input type="text" class="form-control" id="actors" placeholder="Entrez les acteurs" name="actors" value="{{ $film->actors }}">
+        </div>
+        <div class="form-group mb-3">
+            <label for="director">Réalisateur:</label>
+            <input type="text" class="form-control" id="director" placeholder="Entrez le réalisateur" name="director" value="{{ $film->director }}">
         </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>
