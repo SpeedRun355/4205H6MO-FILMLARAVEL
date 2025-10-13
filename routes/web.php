@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FilmController;
+use App\Http\Controllers\FilmUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +14,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/apropos', function () {
+    return view('apropos');
+}); 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route:: get ('/', [FilmController::class, 'index']);
+//création des routes avec resources
+Route::resources([
+                 'film'=> FilmController::class,
+                 'review'=> FilmUserController::class,
+                ]);
+
