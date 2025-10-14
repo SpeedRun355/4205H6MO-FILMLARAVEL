@@ -44,4 +44,35 @@ class FilmUserController extends Controller
     
         return redirect()->back();
     }
+
+    public function autocomplete(Request $request)
+    {
+        $search = $request->search;
+        $reviews = FilmUser::orderby('comment','asc')
+                    ->select('id','comment', 'film_id')
+                    ->where('comment', 'LIKE', '%'.$search. '%')
+                    ->get();
+                    $response = array();
+                    foreach($reviews as $review){
+                        $response[] = array(
+                            'value' => $review->id,
+                            'label' => $review->title
+                        );
+                    }
+                    /* $users = User::orderby('name','asc')
+                    ->select('id','name')
+                    ->where('name', 'LIKE', '%'.$search. '%')
+                    ->get();
+                    $response = array();
+                    foreach($users as $user){
+                        $response[] = array(
+                            'value' => $user->id,
+                            'label' => $user->name
+                        );
+                    }
+                    */
+
+        return response()->json($response);
+    } 
+
 }
