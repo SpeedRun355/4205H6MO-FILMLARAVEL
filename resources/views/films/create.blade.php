@@ -11,6 +11,15 @@
         </div>
 
     @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
     <form action="{{ route('film.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -37,7 +46,12 @@
         </div>
 
         <input type="hidden" name="user_id" value="<?= 1?>" /><br />
-        <button type="submit" class="btn btn-primary">Publier</button>    <a href="{{ url('/') }}" class="btn btn-info">Retour à la page d'accueil</a>  
+
+        <div  class="form-group mb-3">
+            <label><strong>Image</strong></label>
+            <input type = "file" name= "photo"  class = "form-control">
+            <button type="submit" class="btn btn-primary">Publier</button>    <a href="{{ url('/') }}" class="btn btn-info">Retour à l'accueil</a>  
+        </div>
 
     </form>
 

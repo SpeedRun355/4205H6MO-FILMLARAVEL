@@ -5,6 +5,9 @@
 
     <div class="row">
         <div class="col-md-12">
+            @if ($film->photo)
+              <img src="../images/upload/{{$film->photo}}"width="200px" height="100px">
+            @endif
             <h1>{{ $film->name }} </h1><strong>Crée le: {{ $film->created_at }} </strong>
             <p class="lead">{{ $film->global_rating }}</p>
 

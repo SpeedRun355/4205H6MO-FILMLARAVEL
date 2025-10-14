@@ -15,8 +15,17 @@
         </div>
 
     @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
-    <form method="post" action="{{ url('film/'. $film->id) }}" >
+    <form method="post" action="{{ url('film/'. $film->id) }}" enctype="multipart/form-data">
         @method('PATCH')
         @csrf
         <div class="form-group mb-3">
@@ -39,10 +48,14 @@
             <label for="director">Réalisateur:</label>
             <input type="text" class="form-control" id="director" placeholder="Entrez le réalisateur" name="director" value="{{ $film->director }}">
         </div>
+        <div class="form-group mb-3">
+            <label><strong>Modifier l'Image</strong></label>
+            <input type = "file" name= "photo"  class = "form-control">
+        </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>
        
-            <a href="{{ url('films/'. $film->id) }}" class="btn btn-info">Annuler</a>  
+        <a href="{{ url('films/'. $film->id) }}" class="btn btn-info">Annuler</a>  
     </form>
    
   
