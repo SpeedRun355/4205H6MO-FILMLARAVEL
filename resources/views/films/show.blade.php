@@ -22,7 +22,42 @@
             </div>
         </div>
     </div>
-
+    {{-- Barre de recherche autocomplétion --}}
+    <div class="car-body">
+        <form>
+            @csrf
+            <div class="form-group">
+                <input type="text" class="typeahead form-control"  id = "review_search" placeholder = "Rechercher..." > 
+            </div>
+        </form>
+        <script type="text/javascript">
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $(document ).ready(function(){
+            $('#review_search').autocomplete({  
+                source:function( request, response ) {
+                $.ajax({
+                url:"{{route('autocomplete')}}",
+                type: 'POST',
+                dataType: "json",
+                    data: {
+                    _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function( data ) {
+                        response( data );
+                    }    
+                    }); 
+                },
+                select: function (event, ui) {
+                $('#review_search').val(ui.item.label);
+            
+            return false;
+                }
+            });
+                });
+        </script>
+    </div>
+    {{-- fin du bloc autocomplétion --}}
  {{-- Section des commentaires --}}
  <div class="container">   
     <h2> @lang("general.Les commentaires"):</h2>

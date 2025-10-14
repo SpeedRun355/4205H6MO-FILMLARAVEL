@@ -4,6 +4,7 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\FilmUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocalizationController;
+use App\Models\FilmUser;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::get('/apropos', function () {
 }); 
 
 Route:: get ('/', [FilmController::class, 'index']);
+Route::post('/autocomplete', [FilmUserController::class,'autocomplete'])->name('autocomplete');
 //création des routes avec resources
 Route::resources([
                  'film'=> FilmController::class,
