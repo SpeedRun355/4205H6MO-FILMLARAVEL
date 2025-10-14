@@ -58,18 +58,18 @@
 
         @csrf
         <div class="form-group mb-3">
-            <label for="review">Note:</label>
-            <input type="text" class="form-control" id="review" placeholder="Entrez votre note" name="review">
+            <label for="review">@lang("general.note"):</label>
+            <input type="text" class="form-control" id="review" placeholder=@lang("general.entrez") name="review">
         </div>
 
         <div class="form-group mb-3">
-            <label for="comment">Ajouter votre commentaire:</label>
+            <label for="comment">@lang("general.Ajouter un commentaire") :</label>
             <textarea name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
         </div>
 
         <div class="form-group mb-3">
             <label for="user_id">User ID :</label>
-            <input type="text" class="form-control" id="user_id" placeholder="Entrez votre user id" name="user_id">
+            <input type="text" class="form-control" id="user_id" placeholder=@lang("general.entrez")name="user_id">
         </div>
 
         <input type="hidden" name="film_id" value="{{ $film->id}}" /><br />

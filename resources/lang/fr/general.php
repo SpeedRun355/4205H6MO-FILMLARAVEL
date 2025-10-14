@@ -18,4 +18,5 @@ return [
     "nb"=> "Commentaire numéro ",
     "by"=> "par ",
     "note"=> "Note: ",
+
 ];
