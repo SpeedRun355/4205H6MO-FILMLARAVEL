@@ -3,6 +3,7 @@
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\FilmUserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocalizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,5 @@ Route::resources([
                  'film'=> FilmController::class,
                  'filmUser'=> FilmUserController::class,
                 ]);
-
+Route::get('lang/{locale}', 
+[App\Http\Controllers\LocalizationController::class, 'index']);

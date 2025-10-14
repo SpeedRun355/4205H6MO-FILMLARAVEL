@@ -7,11 +7,11 @@
     <div class="row">
 
         <div class="col-lg-10">
-            <h2>Liste des Films</h2>
+            <h2>@lang("general.list films")</h2>
         </div>
 
         <div class="col-lg-2">
-            <a class="btn btn-success" href="{{ url('films/create') }}">Ajouter un film</a>
+            <a class="btn btn-success" href="{{ url('films/create') }}">@lang("general.ajouter un film")</a>
         </div>
 
     </div>
@@ -48,7 +48,7 @@
 
                 {{ $film->global_rating }}
                           
-            <a href="{{ url('film/'. $film->id) }}" class="btn btn-outline-primary">En savoir plus</a> 
+            <a href="{{ url('film/'. $film->id) }}" class="btn btn-outline-primary">@lang("general.en savoir plus")</a> 
             </div>
         </div>
         @endforeach
