@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-lg-2">
-            <a class="btn btn-success" href="{{ url('films/create') }}">@lang("general.ajouter un film")</a>
+            <a class="btn btn-success" href="{{ url('film/create') }}">@lang("general.ajouter un film")</a>
         </div>
 
     </div>

@@ -43,13 +43,27 @@ class FilmController extends Controller
                 'film_genre'=> 'required',
                 'actors'=> 'required',
                 'director'=> 'required',
+                'photo'=> 'required|image|mimes:jpg,png,jpeg,gif,svg',
             ]);
             if($validator->fails())
             {
                 return redirect()->back()->with('warning','Tous les champs sont requis');   
             }
             else{
-                Films::create($request->all());       
+                
+                if ($request->file('photo')->isValid()) {
+                    $image = $request->file('photo');
+                    $fileName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('images/upload'), $fileName);
+                }
+                Films::create([
+                    'name' => $request->input('name'),
+                    'global_rating' => $request->input('global_rating'),
+                    'film_genre' => $request->input('film_genre'),
+                    'actors' => $request->input('actors'),
+                    'director' => $request->input('director'),
+                    'photo' => $fileName,
+                ]);   
                 return redirect('/')->with('success', 'film Ajouté avec succès');
             }
     }
@@ -94,13 +108,24 @@ class FilmController extends Controller
             'film_genre'=> 'required',
             'actors'=> 'required',
             'director'=> 'required',
+            'photo'=> 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
         ]);
         if($validator->fails())
         {
-            return redirect()->back()->with('warning','Tous les champs sont requis');   
+            return redirect()->back()->withErrors($validator)->withInput();
+            //return redirect()->back()->with('warning','Tous les champs sont requis');   
         }
         else{
-            $film->update($request->all());
+            $data = $request->only(['name', 'global_rating', 'film_genre', 'actors', 'director']);
+
+            if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+                $image = $request->file('photo');
+                $fileName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/upload'), $fileName);
+                $data['photo'] = $fileName;
+            }
+
+            $film->update($data);
             return redirect('/')->with('success', 'film Modifié avec succès');
         }
     }
