@@ -17,8 +17,8 @@ use App\Models\FilmUser;
 |
 */
 Route::get('/apropos', function () {
-    return view('apropos');
-}); 
+    return view('films.apropos');
+})->name('apropos'); 
 
 Route:: get ('/', [FilmController::class, 'index']);
 Route::post('/autocomplete', [FilmUserController::class,'autocomplete'])->name('autocomplete');
