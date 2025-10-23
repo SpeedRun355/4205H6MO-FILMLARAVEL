@@ -18,4 +18,7 @@ return [
 "nb" => "Comment number ",
 "by" => "by ",
 "note" => "Rating: ",
+"connexion" => "Login",
+"inscription" => "Register",
+"déconnexion" => "Logout",
 ];

@@ -18,4 +18,7 @@ return [
     "nb" => "Número de comentarios ",
     "by" => "por ",
     "note" => "Nota ",
+    "connexion" => "Iniciar sesión",
+    "inscription" => "Registrarse",
+    "déconnexion" => "Cerrar sesión",
 ];

@@ -18,5 +18,8 @@ return [
     "nb"=> "Commentaire numéro ",
     "by"=> "par ",
     "note"=> "Note: ",
+    "connexion" => "Connexion",
+    "inscription" => "Inscription",
+    "déconnexion" => "Déconnexion",
 
 ];
