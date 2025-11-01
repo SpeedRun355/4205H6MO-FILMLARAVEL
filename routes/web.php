@@ -23,10 +23,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route:: get ('/', [FilmController::class, 'index']);
 Route::post('/autocomplete', [FilmUserController::class,'autocomplete'])->name('autocomplete');
 //création des routes avec resources
-Route::resources([
-                 'film'=> FilmController::class,
-                 'filmUser'=> FilmUserController::class,
-                ]);
+Route::resource('filmUser', FilmUserController::class);
+Route::resource('film', FilmController::class)->only(['index', 'show']);
 
 Route::get('lang/{locale}', 
 [App\Http\Controllers\LocalizationController::class, 'index']);
@@ -53,15 +51,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', function () {
         return 'User Profile';
     });
+    
+    Route::get('/apropos', function () {
+        return view('films.apropos');
+    })->name('apropos');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', function () {
         return 'Admin Dashboard';
     });
-    Route::get('/apropos', function () {
-        return view('films.apropos');
-    })->name('apropos');
+    Route::resource('film', FilmController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
 });
 
 Route::middleware(['auth'])->group(function () {

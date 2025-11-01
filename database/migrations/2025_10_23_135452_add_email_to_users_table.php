@@ -15,6 +15,7 @@ class AddEmailToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('email')->unique()->nullable()->after('surname');
+            $table->date('email_verified_at')->nullable()->after('email');
         });
     }
 
