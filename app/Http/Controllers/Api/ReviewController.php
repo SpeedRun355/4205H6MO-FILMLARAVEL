@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FilmUser;
@@ -35,9 +37,10 @@ class ReviewController extends Controller
         $review = $request->all();
         
         $request->validate([
-        'review'     => 'required',
-        'comment'   => 'required',
-        'photo'     => 'required|image'
+            'review'     => 'required',
+            'comment'   => 'required',
+            'photo'     => 'required|image',
+            'film_id'  => 'required',
         ]);
 
         
@@ -50,10 +53,13 @@ class ReviewController extends Controller
         // $review = $fileName ;
         }
 
+
         $review =  FilmUser::create([
             'review' => $request->input('review'),
             'comment' => $request->input('comment'),
             'photo' => $fileName,
+            'film_id' => $request->input('film_id'),
+            'user_id' => $request->user()->id,
         ]);
 
         // On retourne les informations du nouvel review en JSON

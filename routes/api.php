@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Register review resource routes
-Route::apiResource('review', ReviewController::class);
+// Register review resource routes (protected)
+Route::middleware('auth:sanctum')->apiResource('review', ReviewController::class);
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
