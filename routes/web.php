@@ -72,18 +72,3 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::post('register', [RegisterController::class, 'register']);
-Route::post('login', [RegisterController::class, 'login']);
-Route::get('/reviews', [RegisterController::class, 'index']);
-Route::get('/reviews/{id}', [RegisterController::class, 'show']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('reviews', [ReviewController::class, 'store']);
-    Route::get('reviews/edit/{id}', [ReviewController::class, 'show']);
-    Route::delete('reviews/{id}', [ReviewController::class, 'destroy']);
-    Route::put('reviews/update/{id}', [ReviewController::class, 'update']);
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Illuminate\Http\Request $request) {
-    return $request->user();
-});

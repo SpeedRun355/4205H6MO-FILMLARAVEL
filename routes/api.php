@@ -22,3 +22,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Register review resource routes
 Route::apiResource('review', ReviewController::class);
+
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [RegisterController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [RegisterController::class, 'logout']);
+Route::get('/reviews', [RegisterController::class, 'index']);
+Route::get('/reviews/{id}', [RegisterController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('reviews', [ReviewController::class, 'store']);
+    Route::get('reviews/edit/{id}', [ReviewController::class, 'show']);
+    Route::delete('reviews/{id}', [ReviewController::class, 'destroy']);
+    Route::put('reviews/update/{id}', [ReviewController::class, 'update']);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Illuminate\Http\Request $request) {
+    return $request->user();
+});
