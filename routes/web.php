@@ -4,6 +4,8 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\FilmUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\LocalizationController;
 use App\Models\FilmUser;
 
@@ -68,4 +70,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', function () {
         return 'User Profile';
     });
+});
+
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [RegisterController::class, 'login']);
+Route::get('/reviews', [RegisterController::class, 'index']);
+Route::get('/reviews/{id}', [RegisterController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('reviews', [ReviewController::class, 'store']);
+    Route::get('reviews/edit/{id}', [ReviewController::class, 'show']);
+    Route::delete('reviews/{id}', [ReviewController::class, 'destroy']);
+    Route::put('reviews/update/{id}', [ReviewController::class, 'update']);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Illuminate\Http\Request $request) {
+    return $request->user();
 });
