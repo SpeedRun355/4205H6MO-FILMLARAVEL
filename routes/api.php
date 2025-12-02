@@ -16,18 +16,14 @@ use App\Http\Controllers\Api\ReviewController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 // Register review resource routes (protected)
-Route::middleware('auth:sanctum')->apiResource('review', ReviewController::class);
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('logout', [RegisterController::class, 'logout'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->post('logout', [RegisterController::class, 'logout']);
-Route::get('/reviews', [RegisterController::class, 'index']);
-Route::get('/reviews/{id}', [RegisterController::class, 'show']);
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/reviews/{id}', [ReviewController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('reviews', [ReviewController::class, 'store']);

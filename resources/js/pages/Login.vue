@@ -8,17 +8,10 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Register</div>
+                    <div class="card-header">Login</div>
                     <div class="card-body">
 
                         <form @submit.prevent="handleSubmit">
-
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label text-md-right">Name</label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" v-model="name" required autocomplete="off">
-                                </div>
-                            </div><br>
 
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label text-md-right">Email</label>
@@ -46,7 +39,7 @@
 
                             <div class="form-group row">
                                 <div class="col-md-8 offset-md-4">
-                                    <button class="btn btn-primary">Register</button>
+                                    <button class="btn btn-primary">Login</button>
                                 </div>
                             </div>
 
@@ -64,7 +57,6 @@
 export default {
     data() {
         return {
-            name: "",
             email: "",
             password: "",
             c_password: "",
@@ -78,11 +70,10 @@ export default {
             try {
                 await axios.get('/sanctum/csrf-cookie');
 
-                const res = await axios.post('/register', {
-                    name: this.name,
+                const res = await axios.post('/api/login', {
                     email: this.email,
                     password: this.password,
-                    password_confirmation: this.c_password
+                    c_password: this.c_password
                 });
 
                 if (res.data.success) {
@@ -91,25 +82,8 @@ export default {
             } catch (err) {
 
                 if (err.response && err.response.status === 422) {
-                    // Support both Laravel default validation structure (errors)
-                    // and the project's BaseController -> sendError structure (data)
-                    const resp = err.response.data || {};
-
-                    // Laravel default: { errors: { field: ["msg"] } }
-                    if (resp.errors) {
-                        this.error = Object.values(resp.errors).flat().join(' ');
-                    }
-                    // Project sendError: { success: false, message: 'Validation Error.', data: { field: [...] } }
-                    else if (resp.data) {
-                        this.error = Object.values(resp.data).flat().join(' ');
-                    }
-                    // Fallback: use message if present
-                    else if (resp.message) {
-                        this.error = resp.message;
-                    } else {
-                        this.error = "Validation failed";
-                    }
-
+                    // Laravel validation errors
+                    this.error = Object.values(err.response.data.errors).flat().join(' ');
                 } else {
                     this.error = "Erreur lors de l'inscription";
                 }

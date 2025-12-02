@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="text-center" style="margin: 20px 0px 20px 0px; background-color:#2769b0; color: #FFFF;">
-            <h2>Site monopage Laravel-Vue avec authentification</h2>
+            <h2>Site monopage de Review</h2>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#3485dc; color: #FFFF;">
             <div class="collapse navbar-collapse" style="background-color:#3485dc; color: #FFFF;">
@@ -9,16 +9,16 @@
                 <!-- for logged-in user-->
                 <div class="navbar-nav" v-if="isLoggedIn" style="background-color:#3485dc; color: #FFFF;">
                     <router-link to="/dashboard" class="nav-item nav-link">Dashboard</router-link>
-                    <router-link to="/articles" class="nav-item nav-link">Articles</router-link>
+                    <router-link to="/articles" class="nav-item nav-link">Reviews</router-link>
                     <a class="nav-item nav-link" style="cursor: pointer;" @click="logout">Logout</a>
                 </div>
                 <!-- for non-logged user-->
                 <div class="navbar-nav" v-else style="background-color:#3485dc; color: #FFFF;">
                     <router-link to="/" class="nav-item nav-link">Home</router-link>
-                    <router-link to="/articles" class="nav-item nav-link">Articles</router-link>
-                    <!--   <router-link to="/about" class="nav-item nav-link">About</router-link>
-                    <router-link to="/login" class="nav-item nav-link">login</router-link>
-                    <router-link to="/register" class="nav-item nav-link">Register </router-link> -->
+                    <router-link to="/reviews" class="nav-item nav-link">Reviews</router-link>
+                    <router-link to="/about" class="nav-item nav-link">About</router-link>
+                    <router-link to="/login" class="nav-item nav-link">Login</router-link>
+                    <router-link to="/register" class="nav-item nav-link">Register</router-link>
 
                 </div>
             </div>
@@ -31,7 +31,7 @@
             <div class="container">
                 <h6>Site monopage créé avec Laravel 8 et Vue js</h6>
                 <h6>Cours: Applications Web trensactionnelles</h6>
-                <h6>Crée par: Ouiza Ouyed</h6>
+                <h6>Crée par: Félix-Etienne Et Mario</h6>
             </div>
         </footer>
     </div>
@@ -62,7 +62,7 @@ export default {
                 this.$axios.post('/api/logout')
                     .then(response => {
                         if (response.data.success) {
-                            window.location.href = "/articles"
+                            window.location.href = "/reviews"
                         } else {
                             console.log(response)
                         }

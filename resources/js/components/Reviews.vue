@@ -87,7 +87,7 @@ export default {
             }
         },
 
-        /*  goAdd() {
+        goAdd() {
              // Si pas connecté -> redirection vers la page de login
              if (!this.isLoggedIn) {
                  // Utilise le nom de route 'login' si tu l'as défini, sinon chemin '/login'
@@ -96,7 +96,7 @@ export default {
              }
              // sinon rediriger vers addarticle (nom de route)
              this.$router.push({ name: 'addarticle' }).catch(() => { this.$router.push('/add') });
-         }, */
+         },
 
         checkAuthBeforeDelete(id) {
             if (!this.isLoggedIn) {

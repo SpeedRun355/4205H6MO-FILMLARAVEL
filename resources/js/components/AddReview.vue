@@ -4,12 +4,12 @@
 
         <form @submit.prevent="addReview" enctype="multipart/form-data" class="p-3 border rounded bg-light">
             <div class="mb-3">
-                <label class="form-label">Titre :</label>
+                <label class="form-label">Review :</label>
                 <input type="text" v-model="review.title" class="form-control" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Contenu :</label>
+                <label class="form-label">Comment :</label>
                 <textarea v-model="review.content" class="form-control" required></textarea>
             </div>
 
