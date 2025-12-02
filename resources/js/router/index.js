@@ -18,7 +18,7 @@ export const routes = [
     {
         name: 'reviews',
         path: '/reviews',
-        component: Articles
+        component: Reviews
     },
 
 

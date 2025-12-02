@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h4 class="text-center">Liste des articles</h4><br />
+        <h4 class="text-center">Liste des reviews</h4><br />
 
         <!-- Le bouton est affiché même si l'utilisateur n'est pas connecté.
              Le click appelle goAdd() qui redirige vers /login si besoin. -->
-        <router-link v-if="isLoggedIn" :to="{ name: 'addarticle' }" class="btn btn-primary">
+        <router-link v-if="isLoggedIn" :to="{ name: 'addreview' }" class="btn btn-primary">
             Ajouter
         </router-link>
 
@@ -23,18 +23,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="article in articles" :key="article.id">
+                <tr v-for="review in reviews" :key="review.id">
                     <td style="text-align: center; vertical-align: middle;">
                         <div v-if="article.photo">
-                            <img class="img-thumbnail" :src="'/images/upload/' + article.photo" />
+                            <img class="img-thumbnail" :src="'/images/upload/' + review.photo" />
                             <!-- // il est possible d'ajouter le style à l'image
                                 <img class="img-thumbnail" :src="'/images/upload/' + article.photo"
                                 style="height:100px;width:150px" /> -->
 
                         </div>
                     </td>
-                    <td style="text-align: center; vertical-align: middle;">{{ article.Review }}</td>
-                    <td style="text-align: center; vertical-align: middle;">{{ article.Comment }}</td>
+                    <td style="text-align: center; vertical-align: middle;">{{ review.Review }}</td>
+                    <td style="text-align: center; vertical-align: middle;">{{ review.Comment }}</td>
                     <td>
                         <div style="text-align: center; vertical-align: middle;">
                             <!--  <router-link :to="{ name: 'showarticle', params: { id: article.id } }"
@@ -45,7 +45,7 @@
                                 class="btn btn-warning" v-if="isLoggedIn">Edit
                             </router-link> -->
 
-                            <button class="btn btn-danger" @click="checkAuthBeforeDelete(article.id)">
+                            <button class="btn btn-danger" @click="checkAuthBeforeDelete(review.id)">
                                 Delete
                             </button>
 
@@ -61,16 +61,15 @@
 export default {
     data() {
         return {
-            articles: [],
+            reviews: [],
             isLoggedIn: false,
         }
     },
     created() {
-        this.checkLoginStatus(); // Vérification de la connexion dès la création du composant
-        // Chargement des articles
-        axios.get('/api/articles')
+        this.checkLoginStatus();
+        axios.get('/api/reviews')
             .then(response => {
-                this.articles = response.data;
+                this.reviews = response.data;
             })
             .catch(error => {
                 console.error(error);
@@ -104,24 +103,24 @@ export default {
                 // redirection correcte : name ou path
                 this.$router.push({ name: 'login' }).catch(() => { this.$router.push('/login') });
             } else {
-                this.deleteArticle(id);
+                this.deleteReview(id);
             }
         },
 
-        deleteArticle(id) {
-            if (!confirm("Are you sure to delete this article ?")) {
+        deleteReview(id) {
+            if (!confirm("Are you sure to delete this review ?")) {
                 return;
             }
             axios
-                .delete(`/api/articles/${id}`)
+                .delete(`/api/reviews/${id}`)
                 .then(() => {
-                    // Retirer l'article du tableau local après suppression
-                    this.articles = this.articles.filter(
-                        (article) => article.id !== id
+                    // Retirer le review du tableau local après suppression
+                    this.reviews = this.reviews.filter(
+                        (review) => review.id !== id
                     );
                 })
                 .catch((error) => {
-                    console.error("Erreur lors de la suppression de l'article :", error);
+                    console.error("Erreur lors de la suppression du review :", error);
                     // si erreur 401/403 -> rediriger vers login
                     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                         this.$router.push({ name: 'login' }).catch(() => { this.$router.push('/login') });
