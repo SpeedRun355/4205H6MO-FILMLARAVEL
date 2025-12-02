@@ -25598,29 +25598,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "App",
-  data: function data() {
+  data() {
     return {
       isLoggedIn: false
     };
   },
-  created: function created() {
+  created() {
     if (window.Laravel.isLoggedin) {
       this.isLoggedIn = true;
     }
   },
   methods: {
-    logout: function logout(e) {
-      var _this = this;
+    logout(e) {
       console.log('ss');
       e.preventDefault();
-      this.$axios.get('/sanctum/csrf-cookie').then(function (response) {
-        _this.$axios.post('/api/logout').then(function (response) {
+      this.$axios.get('/sanctum/csrf-cookie').then(response => {
+        this.$axios.post('/api/logout').then(response => {
           if (response.data.success) {
             window.location.href = "/articles";
           } else {
             console.log(response);
           }
-        })["catch"](function (error) {
+        }).catch(function (error) {
           console.error(error);
         });
       });
@@ -25642,29 +25641,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
+  data() {
     return {
       reviews: [],
       isLoggedIn: false
     };
   },
-  created: function created() {
-    var _this = this;
+  created() {
     this.checkLoginStatus();
-    axios.get('/api/reviews').then(function (response) {
-      _this.reviews = response.data;
-    })["catch"](function (error) {
+    axios.get('/api/reviews').then(response => {
+      this.reviews = response.data;
+    }).catch(error => {
       console.error(error);
     });
   },
   methods: {
-    checkLoginStatus: function checkLoginStatus() {
+    checkLoginStatus() {
       // Si tu utilises session auth (Laravel) on lit window.Laravel.isLoggedin, sinon localStorage token
       if (window.Laravel && typeof window.Laravel.isLoggedin !== 'undefined') {
         this.isLoggedIn = !!window.Laravel.isLoggedin;
       } else {
         // fallback si tu utilises un token localStorage
-        var token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         this.isLoggedIn = !!token;
       }
     },
@@ -25678,37 +25676,34 @@ __webpack_require__.r(__webpack_exports__);
          // sinon rediriger vers addarticle (nom de route)
          this.$router.push({ name: 'addarticle' }).catch(() => { this.$router.push('/add') });
      }, */
-    checkAuthBeforeDelete: function checkAuthBeforeDelete(id) {
-      var _this2 = this;
+
+    checkAuthBeforeDelete(id) {
       if (!this.isLoggedIn) {
         // redirection correcte : name ou path
         this.$router.push({
           name: 'login'
-        })["catch"](function () {
-          _this2.$router.push('/login');
+        }).catch(() => {
+          this.$router.push('/login');
         });
       } else {
         this.deleteReview(id);
       }
     },
-    deleteReview: function deleteReview(id) {
-      var _this3 = this;
+    deleteReview(id) {
       if (!confirm("Are you sure to delete this review ?")) {
         return;
       }
-      axios["delete"]("/api/reviews/".concat(id)).then(function () {
+      axios.delete(`/api/reviews/${id}`).then(() => {
         // Retirer le review du tableau local après suppression
-        _this3.reviews = _this3.reviews.filter(function (review) {
-          return review.id !== id;
-        });
-      })["catch"](function (error) {
+        this.reviews = this.reviews.filter(review => review.id !== id);
+      }).catch(error => {
         console.error("Erreur lors de la suppression du review :", error);
         // si erreur 401/403 -> rediriger vers login
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-          _this3.$router.push({
+          this.$router.push({
             name: 'login'
-          })["catch"](function () {
-            _this3.$router.push('/login');
+          }).catch(() => {
+            this.$router.push('/login');
           });
         }
       });
@@ -25731,17 +25726,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Dashboard",
-  data: function data() {
+  data() {
     return {
       name: null
     };
   },
-  created: function created() {
+  created() {
     if (window.Laravel.user) {
       this.name = window.Laravel.user.name;
     }
   },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(to, from, next) {
     if (!window.Laravel.isLoggedin) {
       window.location.href = "/";
     }
@@ -25764,12 +25759,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Home",
-  data: function data() {
+  data() {
     return {
       //
     };
   },
-  created: function created() {},
+  created() {},
   methods: {}
 });
 
@@ -25787,50 +25782,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 
-var _hoisted_1 = {
-  "class": "container"
+const _hoisted_1 = {
+  class: "container"
 };
-var _hoisted_2 = {
-  "class": "navbar navbar-expand-lg navbar-light bg-light",
+const _hoisted_2 = {
+  class: "navbar navbar-expand-lg navbar-light bg-light",
   style: {
     "background-color": "#3485dc",
     "color": "#FFFF"
   }
 };
-var _hoisted_3 = {
-  "class": "collapse navbar-collapse",
+const _hoisted_3 = {
+  class: "collapse navbar-collapse",
   style: {
     "background-color": "#3485dc",
     "color": "#FFFF"
   }
 };
-var _hoisted_4 = {
+const _hoisted_4 = {
   key: 0,
-  "class": "navbar-nav",
+  class: "navbar-nav",
   style: {
     "background-color": "#3485dc",
     "color": "#FFFF"
   }
 };
-var _hoisted_5 = {
-  "class": "navbar-nav",
+const _hoisted_5 = {
+  class: "navbar-nav",
   style: {
     "background-color": "#3485dc",
     "color": "#FFFF"
   }
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
-  var _component_router_view = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-view");
+  const _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+  const _component_router_view = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-view");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "text-center",
+    class: "text-center",
     style: {
       "margin": "20px 0px 20px 0px",
       "background-color": "#2769b0",
@@ -25838,50 +25827,40 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Site monopage Laravel-Vue avec authentification")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" for logged-in user"), $data.isLoggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/dashboard",
-    "class": "nav-item nav-link"
+    class: "nav-item nav-link"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _toConsumableArray(_cache[1] || (_cache[1] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dashboard", -1 /* CACHED */)]));
-    }),
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [...(_cache[1] || (_cache[1] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dashboard", -1 /* CACHED */)]))]),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/articles",
-    "class": "nav-item nav-link"
+    class: "nav-item nav-link"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _toConsumableArray(_cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Articles", -1 /* CACHED */)]));
-    }),
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [...(_cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Articles", -1 /* CACHED */)]))]),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-    "class": "nav-item nav-link",
+    class: "nav-item nav-link",
     style: {
       "cursor": "pointer"
     },
-    onClick: _cache[0] || (_cache[0] = function () {
-      return $options.logout && $options.logout.apply($options, arguments);
-    })
+    onClick: _cache[0] || (_cache[0] = (...args) => $options.logout && $options.logout(...args))
   }, "Logout")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 1
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" for non-logged user"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/",
-    "class": "nav-item nav-link"
+    class: "nav-item nav-link"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _toConsumableArray(_cache[3] || (_cache[3] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Home", -1 /* CACHED */)]));
-    }),
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [...(_cache[3] || (_cache[3] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Home", -1 /* CACHED */)]))]),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/articles",
-    "class": "nav-item nav-link"
+    class: "nav-item nav-link"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _toConsumableArray(_cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Articles", -1 /* CACHED */)]));
-    }),
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [...(_cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Articles", -1 /* CACHED */)]))]),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("   <router-link to=\"/about\" class=\"nav-item nav-link\">About</router-link>\r\n                    <router-link to=\"/login\" class=\"nav-item nav-link\">login</router-link>\r\n                    <router-link to=\"/register\" class=\"nav-item nav-link\">Register </router-link> ")])], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))])]), _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("footer", {
-    "class": "footer"
+    class: "footer"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "container"
+    class: "container"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", null, "Site monopage créé avec Laravel 8 et Vue js"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", null, "Cours: Applications Web trensactionnelles"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", null, "Crée par: Ouiza Ouyed")])], -1 /* CACHED */))]);
 }
 
@@ -25899,83 +25878,73 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 
-var _hoisted_1 = {
-  "class": "table table-bordered mt-3"
+const _hoisted_1 = {
+  class: "table table-bordered mt-3"
 };
-var _hoisted_2 = {
+const _hoisted_2 = {
   style: {
     "text-align": "center",
     "vertical-align": "middle"
   }
 };
-var _hoisted_3 = {
+const _hoisted_3 = {
   key: 0
 };
-var _hoisted_4 = ["src"];
-var _hoisted_5 = {
+const _hoisted_4 = ["src"];
+const _hoisted_5 = {
   style: {
     "text-align": "center",
     "vertical-align": "middle"
   }
 };
-var _hoisted_6 = {
+const _hoisted_6 = {
   style: {
     "text-align": "center",
     "vertical-align": "middle"
   }
 };
-var _hoisted_7 = {
+const _hoisted_7 = {
   style: {
     "text-align": "center",
     "vertical-align": "middle"
   }
 };
-var _hoisted_8 = ["onClick"];
+const _hoisted_8 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+  const _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
-    "class": "text-center"
+    class: "text-center"
   }, "Liste des reviews", -1 /* CACHED */)), _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Le bouton est affiché même si l'utilisateur n'est pas connecté.\r\n             Le click appelle goAdd() qui redirige vers /login si besoin. "), $data.isLoggedIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_router_link, {
     key: 0,
     to: {
       name: 'addreview'
     },
-    "class": "btn btn-primary"
+    class: "btn btn-primary"
   }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _toConsumableArray(_cache[0] || (_cache[0] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Ajouter ", -1 /* CACHED */)]));
-    }),
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [...(_cache[0] || (_cache[0] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Ajouter ", -1 /* CACHED */)]))]),
     _: 1 /* STABLE */
   })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Version alternative : toujours visible, redirige vers login si non connecté "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("  <button v-else @click=\"goAdd\" class=\"btn btn-primary\">\r\n            Ajouter\r\n        </button> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_1, [_cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     scope: "col",
-    "class": "text-center"
+    class: "text-center"
   }, "Image"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     scope: "col",
-    "class": "text-center"
+    class: "text-center"
   }, "Review"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     scope: "col",
-    "class": "text-center"
+    class: "text-center"
   }, "Comment"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     scope: "col",
-    "class": "text-center"
-  }, "Actions")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.reviews, function (review) {
+    class: "text-center"
+  }, "Actions")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.reviews, review => {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: review.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_2, [_ctx.article.photo ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-      "class": "img-thumbnail",
+      class: "img-thumbnail",
       src: '/images/upload/' + review.photo
     }, null, 8 /* PROPS */, _hoisted_4), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" // il est possible d'ajouter le style à l'image\r\n                                <img class=\"img-thumbnail\" :src=\"'/images/upload/' + article.photo\"\r\n                                style=\"height:100px;width:150px\" /> ")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(review.Review), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(review.Comment), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("  <router-link :to=\"{ name: 'showarticle', params: { id: article.id } }\"\r\n                                class=\"btn btn-primary\">View\r\n                            </router-link>\r\n\r\n                            <router-link :to=\"{ name: 'editarticle', params: { id: article.id } }\"\r\n                                class=\"btn btn-warning\" v-if=\"isLoggedIn\">Edit\r\n                            </router-link> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-      "class": "btn btn-danger",
-      onClick: function onClick($event) {
-        return $options.checkAuthBeforeDelete(review.id);
-      }
+      class: "btn btn-danger",
+      onClick: $event => $options.checkAuthBeforeDelete(review.id)
     }, " Delete ", 8 /* PROPS */, _hoisted_8)])])]);
   }), 128 /* KEYED_FRAGMENT */))])])]);
 }
@@ -51568,7 +51537,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
+const app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 app.config.globalProperties.$axios = (axios__WEBPACK_IMPORTED_MODULE_2___default());
 app.use(_router__WEBPACK_IMPORTED_MODULE_3__["default"]);
 app.mount('#app');
@@ -51817,7 +51786,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var routes = [{
+const routes = [{
   name: 'home',
   path: '/',
   component: _pages_Home__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -51830,12 +51799,12 @@ var routes = [{
   path: '/reviews',
   component: _components_Reviews__WEBPACK_IMPORTED_MODULE_3__["default"]
 }];
-var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createRouter)({
+const router = (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createRouter)({
   history: (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createWebHistory)(),
   routes: routes
 });
-router.beforeEach(function (to, from, next) {
-  var token = localStorage.getItem("token");
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
   if (to.meta.requiresAuth && !token) {
     next({
       name: "/login"

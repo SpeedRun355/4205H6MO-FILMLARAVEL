@@ -1,16 +1,16 @@
 <template>
     <div class="container mt-4">
-        <h4 class="text-center mb-4">Ajouter un article</h4>
+        <h4 class="text-center mb-4">Ajouter une review</h4>
 
-        <form @submit.prevent="addArticle" enctype="multipart/form-data" class="p-3 border rounded bg-light">
+        <form @submit.prevent="addReview" enctype="multipart/form-data" class="p-3 border rounded bg-light">
             <div class="mb-3">
                 <label class="form-label">Titre :</label>
-                <input type="text" v-model="article.title" class="form-control" required />
+                <input type="text" v-model="review.title" class="form-control" required />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Contenu :</label>
-                <textarea v-model="article.content" class="form-control" required></textarea>
+                <textarea v-model="review.content" class="form-control" required></textarea>
             </div>
 
             <div class="mb-3">
@@ -30,7 +30,7 @@
 
 import { ref } from "vue";
 
-const article = ref({
+const review = ref({
     title: "",
     content: "",
     photo: null,
@@ -39,10 +39,10 @@ const article = ref({
 const loading = ref(false);
 
 function onFileChange(e) {
-    article.value.photo = e.target.files[0];
+    review.value.photo = e.target.files[0];
 }
 
-async function addArticle() {
+async function addReview() {
     try {
         loading.value = true;
 
@@ -55,12 +55,12 @@ async function addArticle() {
         }
         // Préparer les données
         const formData = new FormData();
-        formData.append("title", article.value.title);
-        formData.append("content", article.value.content);
-        if (article.value.photo) formData.append("photo", article.value.photo);
+        formData.append("title", review.value.title);
+        formData.append("content", review.value.content);
+        if (review.value.photo) formData.append("photo", review.value.photo);
 
-        // Envoi de l’article
-        const response = await axios.post("/api/articles", formData, {
+        // Envoi de l’review
+        const response = await axios.post("/api/reviews", formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "multipart/form-data",
@@ -68,8 +68,8 @@ async function addArticle() {
             //withCredentials: true,
         });
 
-        alert("Article ajouté avec succès !");
-        window.location.href = "/articles";
+        alert("review ajouté avec succès !");
+        window.location.href = "/reviews";
     } catch (error) {
         console.error("Erreur complète :", error);
         console.error("Réponse :", error.response?.data);
