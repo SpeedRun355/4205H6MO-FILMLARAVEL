@@ -24,6 +24,7 @@ Route::post('logout', [RegisterController::class, 'logout'])->middleware('auth:s
 Route::middleware('auth:sanctum')->post('logout', [RegisterController::class, 'logout']);
 Route::get('/reviews', [ReviewController::class, 'index']);
 Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+Route::get('/reviews/autocomplete', [ReviewController::class, 'autocomplete'])->name('autocomplete');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('reviews', [ReviewController::class, 'store']);

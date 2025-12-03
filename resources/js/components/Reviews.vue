@@ -1,5 +1,9 @@
 <template>
+
     <div>
+         <div>
+        <SearchBar />
+    </div>
         <h4 class="text-center">Liste des reviews</h4><br />
 
         <!-- Le bouton est affiché même si l'utilisateur n'est pas connecté.
@@ -58,7 +62,12 @@
 </template>
 
 <script>
+import SearchBar from '../pages/SearchBar.vue';
+
 export default {
+    components: {
+        SearchBar,
+    },
     data() {
         return {
             reviews: [],
