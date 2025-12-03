@@ -5,6 +5,8 @@ import Dashboard from '../pages/Dashboard';
 import Reviews from '../components/Reviews';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import EditReview from '../components/EditReview';
+import AddReview from '../components/AddReview';
 
 export const routes = [
     {
@@ -31,7 +33,17 @@ export const routes = [
         name: 'register',
         path: '/register',
         component: Register
-    }
+    },
+    {
+        name: 'addreview',
+        path: '/add',
+        component: AddReview
+    },
+    {
+        name: 'editvreview',
+        path: '/edit/:id',
+        component: EditReview
+    },
 
 ];
 

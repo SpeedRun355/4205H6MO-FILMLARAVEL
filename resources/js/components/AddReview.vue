@@ -31,8 +31,8 @@
 import { ref } from "vue";
 
 const review = ref({
-    title: "",
-    content: "",
+    review: "",
+    comment: "",
     photo: null,
 });
 
@@ -55,8 +55,8 @@ async function addReview() {
         }
         // Préparer les données
         const formData = new FormData();
-        formData.append("title", review.value.title);
-        formData.append("content", review.value.content);
+        formData.append("review", review.value.review);
+        formData.append("comment", review.value.comment);
         if (review.value.photo) formData.append("photo", review.value.photo);
 
         // Envoi de l’review

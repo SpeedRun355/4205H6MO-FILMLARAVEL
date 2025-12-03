@@ -9,9 +9,9 @@
         </router-link>
 
         <!-- Version alternative : toujours visible, redirige vers login si non connecté -->
-        <!--  <button v-else @click="goAdd" class="btn btn-primary">
+        <button v-else @click="goAdd" class="btn btn-primary">
             Ajouter
-        </button> -->
+        </button>
 
         <table class="table table-bordered mt-3">
             <thead>
@@ -37,16 +37,16 @@
                     <td style="text-align: center; vertical-align: middle;">{{ review.Comment }}</td>
                     <td>
                         <div style="text-align: center; vertical-align: middle;">
-                            <!--  <router-link :to="{ name: 'showarticle', params: { id: article.id } }"
-                                class="btn btn-primary">View
+                            <router-link :to="{ name: 'showreview', params: { id: article.id } }"
+                                class="btn btn-primary">Détail
                             </router-link>
 
-                            <router-link :to="{ name: 'editarticle', params: { id: article.id } }"
-                                class="btn btn-warning" v-if="isLoggedIn">Edit
-                            </router-link> -->
+                            <router-link :to="{ name: 'editreview', params: { id: article.id } }"
+                                class="btn btn-warning" v-if="isLoggedIn">Modifier
+                            </router-link>
 
-                            <button class="btn btn-danger" @click="checkAuthBeforeDelete(review.id)">
-                                Delete
+                            <button class="btn btn-danger" @click="checkAuthBeforeDelete(article.id)">
+                                Supprimer
                             </button>
 
                         </div>

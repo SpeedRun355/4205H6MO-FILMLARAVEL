@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\Facades\Http;
 
-class RegisterController extends Controller
+class RegisterController extends BaseController
 {
    /**
 
@@ -39,11 +39,11 @@ class RegisterController extends Controller
  
          ]);
  
-         if($validator->fails()){
- 
-             return $this->sendError('Validation Error.', $validator->errors());       
- 
-         }
+        if($validator->fails()){
+
+            return $this->sendError('Validation Error.', $validator->errors(), 422);       
+
+        }
 
         // 🔹 Vérification reCAPTCHA côté serveur
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
@@ -59,6 +59,16 @@ class RegisterController extends Controller
                 'message' => 'Échec de la vérification reCAPTCHA.'
             ], 400);
         }
+
+        // Create the user after validation and captcha
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        $user = User::create($input);
+
+        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+        $success['name'] =  $user->name;
+
+        return response()->json([$success, "message"=> 'User register successfully.']);
 
  
      }
@@ -93,11 +103,11 @@ class RegisterController extends Controller
  
          } 
  
-         else{ 
- 
-             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
- 
-         } 
+        else{ 
+
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 401);
+
+        } 
  
      }
 
