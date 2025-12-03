@@ -7,6 +7,9 @@
     <meta name="csrl - token" content="{{ csrf_token() }}"/>
     <title>Monopage</title>
     <link href="{{ asset('../css/app.css') }}" type="text/css" rel="stylesheet">
+    <!-- reCAPTCHA v2 (render=explicit obligatoire pour Vue) -->
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+
 </head>
 
 <body>

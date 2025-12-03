@@ -45,6 +45,11 @@
                             </div><br>
 
                             <div class="form-group row">
+                                <!-- widget container -->
+                                <div ref="recaptchaWrapper" class="col-md-6"></div>
+                            </div>
+
+                            <div class="form-group row">
                                 <div class="col-md-8 offset-md-4">
                                     <button class="btn btn-primary">Register</button>
                                 </div>
@@ -60,62 +65,126 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            name: "",
-            email: "",
-            password: "",
-            c_password: "",
-            error: null
+<script setup>
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import api from '../axios'; // adapter le chemin au besoin
+import { useRouter } from 'vue-router'; // pour pouvoir utiliser router.push
+const router = useRouter();
+
+const props = defineProps({
+    visible: { type: Boolean, default: false }  //afficher/masquer la fenêtre d'inscription.
+});
+
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const c_password = ref('');
+const error = ref(null);
+const loading = ref(false);
+
+const recaptchaWidgetId = ref(null);
+const recaptchaToken = ref(null);
+const recaptchaWrapper = ref(null);
+
+/* //ou bien
+const data = ref({
+    name:"",
+    email:"",
+    password:"",
+    c_password:"",
+    error: null,
+    loading: false, ...
+
+}); */
+
+const SITE_KEY = process.env.MIX_RECAPTCHA_SITE_KEY || (window.RECAPTCHA_SITE_KEY || ''); // fallback pour MIX
+//const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || (window.RECAPTCHA_SITE_KEY || ''); //fallback pour VITE
+
+
+function renderRecaptcha() {
+    if (!window.grecaptcha || !recaptchaWrapper.value) return;
+    // render once
+    if (recaptchaWidgetId.value !== null) {
+        try { window.grecaptcha.reset(recaptchaWidgetId.value); } catch { }
+        return;
+    }
+    recaptchaWidgetId.value = window.grecaptcha.render(recaptchaWrapper.value, {
+        'sitekey': SITE_KEY,
+        'callback': (token) => {
+            recaptchaToken.value = token;
+        },
+        'expired-callback': () => { recaptchaToken.value = null; }
+    });
+}
+
+onMounted(() => {
+    // If grecaptcha not ready yet, poll until ready
+    let tries = 0;
+    const interval = setInterval(() => {
+        if (window.grecaptcha && window.grecaptcha.render) {
+            renderRecaptcha();
+            clearInterval(interval);
+        } else if (tries++ > 20) {
+            clearInterval(interval);
+            console.warn('reCAPTCHA not loaded');
         }
-    },
-    methods: {
-        async handleSubmit() {
-            this.error = null;
+    }, 300);
+});
 
-            try {
-                await axios.get('/sanctum/csrf-cookie');
+onBeforeUnmount(() => {
+    if (recaptchaWidgetId.value !== null && window.grecaptcha && window.grecaptcha.reset) {
+        window.grecaptcha.reset(recaptchaWidgetId.value);
+    }
+});
 
-                const res = await axios.post('/register', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password,
-                    password_confirmation: this.c_password
-                });
+async function handleRegister() {
+    error.value = null;
+    if (!recaptchaToken.value) {
+        error.value = 'Merci de confirmer que vous n\'êtes pas un robot.';
+        return;
+    }
 
-                if (res.data.success) {
-                    this.$router.push("/login");
-                }
-            } catch (err) {
+    loading.value = true;
+    try {
+        // Option : get CSRF cookie for sanctum if using cookie auth
+        await api.get('/sanctum/csrf-cookie');
 
-                if (err.response && err.response.status === 422) {
-                    // Support both Laravel default validation structure (errors)
-                    // and the project's BaseController -> sendError structure (data)
-                    const resp = err.response.data || {};
+        const res = await api.post('/register', {
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            password_confirmation: c_password.value,
+            'g-recaptcha-response': recaptchaToken.value
+        });
 
-                    // Laravel default: { errors: { field: ["msg"] } }
-                    if (resp.errors) {
-                        this.error = Object.values(resp.errors).flat().join(' ');
-                    }
-                    // Project sendError: { success: false, message: 'Validation Error.', data: { field: [...] } }
-                    else if (resp.data) {
-                        this.error = Object.values(resp.data).flat().join(' ');
-                    }
-                    // Fallback: use message if present
-                    else if (resp.message) {
-                        this.error = resp.message;
-                    } else {
-                        this.error = "Validation failed";
-                    }
-
-                } else {
-                    this.error = "Erreur lors de l'inscription";
-                }
+        if (res.data.success) {
+            // stockage token si tu veux (si renvoyé)
+            if (res.data.data?.token) {
+                localStorage.setItem('token', res.data.data.token);
+                router.push("/login");
             }
-        }
 
+        } else {
+            error.value = res.data.message || 'Erreur inscription';
+        }
+    } catch (err) {
+        if (err.response?.status === 422) {
+            // validation errors
+            const errors = err.response.data.errors || {};
+            error.value = Object.values(errors).flat().join(' ');
+        } else {
+            error.value = 'Erreur lors de la requête';
+            console.log('Réponse:', err.response?.data || err.message);
+        }
+    } finally {
+        loading.value = false;
+        // reset recaptcha widget to allow a new token next time
+        if (window.grecaptcha && recaptchaWidgetId.value !== null) {
+            window.grecaptcha.reset(recaptchaWidgetId.value);
+            recaptchaToken.value = null;
+        }
     }
 }
+
+
 </script>

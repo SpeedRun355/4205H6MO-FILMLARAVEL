@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Http;
 
 class RegisterController extends Controller
 {
@@ -34,33 +35,30 @@ class RegisterController extends Controller
              'password' => 'required',
  
              'c_password' => 'required|same:password',
+             'g-recaptcha-response' => 'required',
  
          ]);
- 
-    
  
          if($validator->fails()){
  
              return $this->sendError('Validation Error.', $validator->errors());       
  
          }
+
+        // 🔹 Vérification reCAPTCHA côté serveur
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            'response' => $request->input('g-recaptcha-response')
+        ]);
  
-    
- 
-         $input = $request->all();
- 
-         $input['password'] = bcrypt($input['password']);
- 
-         $user = User::create($input);
- 
-         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
- 
-         $success['name'] =  $user->name;
-        // $success['id'] =  $user->id;  la réponse lors de l'enregistrement peut aussi être l'id et le token
- 
-    
- 
-         return response()->json([$success, "message"=> 'User register successfully.']);
+
+        $captcha = $response->json();
+        if (empty($captcha['success']) || !$captcha['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Échec de la vérification reCAPTCHA.'
+            ], 400);
+        }
 
  
      }
