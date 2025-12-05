@@ -1,7 +1,10 @@
 <template>
-    <div>
-       Bienvenue sur mon site {{ name }}
-    </div>
+        <div>
+             <p>Bienvenue sur mon site {{ name }}</p>
+             <p>
+                 <router-link :to="{ name: 'about' }" class="btn btn-link">À propos</router-link>
+             </p>
+        </div>
 </template>
 
 <script>
