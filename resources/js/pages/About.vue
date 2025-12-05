@@ -26,6 +26,14 @@
                     <li>Résultat attendu : Nouvelle review ajouté à la liste.</li>
                 </ul>
             </li>
+
+            <li>Chercher une review
+                <ul>
+                    <li>Interagir : Utiliser la barre de recherche pour chercher une review par mot-clé.</li>
+                    <li>Résultat attendu : Affichage des suggestions en temps réel.</li>
+                </ul>
+
+            </li>
         </ol>
 
         <h2>Diagramme de la base de données (ER)</h2>
