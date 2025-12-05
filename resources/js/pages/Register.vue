@@ -11,7 +11,7 @@
                     <div class="card-header">Register</div>
                     <div class="card-body">
 
-                        <form @submit.prevent="handleSubmit">
+                        <form @submit.prevent="handleRegister">
 
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label text-md-right">Name</label>
