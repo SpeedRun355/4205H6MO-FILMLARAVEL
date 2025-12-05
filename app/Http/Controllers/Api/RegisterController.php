@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends BaseController
 {
@@ -46,17 +47,46 @@ class RegisterController extends BaseController
         }
 
         // 🔹 Vérification reCAPTCHA côté serveur
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $request->input('g-recaptcha-response')
-        ]);
- 
+        $secret = env('RECAPTCHA_SECRET_KEY');
+        $token = $request->input('g-recaptcha-response');
+
+        if (empty($secret)) {
+            Log::error('reCAPTCHA secret missing (RECAPTCHA_SECRET_KEY).');
+            return $this->sendError('reCAPTCHA configuration error.', [], 500);
+        }
+        if (empty($token)) {
+            return $this->sendError('reCAPTCHA token missing from request.', [], 422);
+        }
+
+        // perform verification (no-verify only for local debugging)
+        try {
+            $response = Http::withoutVerifying()->asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => $secret,
+                'response' => $token,
+                // 'remoteip' => $request->ip(), // optional
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('reCAPTCHA HTTP request failed: '.$e->getMessage(), ['exception' => $e]);
+            return $this->sendError('reCAPTCHA verification failed (network).', [], 500);
+        }
+
+        if (! $response->successful()) {
+            Log::error('reCAPTCHA siteverify returned non-success', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+            return $this->sendError('reCAPTCHA verification error.', ['body' => $response->body()], 500);
+        }
 
         $captcha = $response->json();
+        Log::info('reCAPTCHA verification response', $captcha);
+
         if (empty($captcha['success']) || !$captcha['success']) {
+            // include error-codes from Google if present
             return response()->json([
                 'success' => false,
-                'message' => 'Échec de la vérification reCAPTCHA.'
+                'message' => 'Échec de la vérification reCAPTCHA.',
+                'errors' => $captcha['error-codes'] ?? null,
             ], 400);
         }
 

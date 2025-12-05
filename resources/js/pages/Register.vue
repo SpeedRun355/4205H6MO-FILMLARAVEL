@@ -153,8 +153,16 @@ async function handleRegister() {
             name: name.value,
             email: email.value,
             password: password.value,
-            password_confirmation: c_password.value,
+            c_password: c_password.value,
             'g-recaptcha-response': recaptchaToken.value
+        });
+
+        console.log({
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            c_password: this.c_password,
+            'g-recaptcha-response': this.gRecaptchaResponse // si vous en avez une
         });
 
         if (res.data.success) {

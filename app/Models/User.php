@@ -26,7 +26,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'birthday',
         'username',
         'password',
-        'role',
     ];
 
     public function Film_User(){
